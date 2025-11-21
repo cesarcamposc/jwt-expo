@@ -1,29 +1,43 @@
 import { StyleSheet, Text, View, TextInput, Pressable } from 'react-native'
 import React from 'react'
 import { useState } from 'react';
+import api from '../utils/api';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Loginscreen = () => {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     
-    const handleLogin = () => {
-        console.log('Email:', email);
-        console.log('Password:', password);
+    const handleLogin = async () => {
+        try {
+            const response = await api.post('/login', { email, password });
+            const { token } = response.data;
+            await AsyncStorage.setItem('token', token);
+            navigation.replace('Profile');
+        } catch (error) {
+            Alert.alert('Error al iniciar sesión', error);
+        }        
     }    
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Login Screen JWT</Text>
       <TextInput
       style={styles.input}
-      placeholder="Email" 
-      value={email} 
+      placeholder="Email"
+      value={email}
+      keyboardType="email-address"
+      autoCapitalize="none"
+      autoCorrect={false}
       onChangeText={setEmail}/>
+
       <TextInput
       style={styles.input}
       placeholder="Password" 
-      value={password} 
+      value={password}
+      secureTextEntry={true} 
       onChangeText={setPassword}/>  
+      
       <Pressable
       style={styles.button}
       onPress={handleLogin}

@@ -3,7 +3,7 @@ import axios from "axios";
 //* Este archivo es el que se encarga de hacer las peticiones a la API.
 //* Su función principal es configurar y gestionar las peticiones al servidor(back-end)
 
-const API_BASE_URL = "http://192.168.1.100:3000"; // reemplaza con tu direccion IP
+const API_BASE_URL = "http://192.168.1.33:3000"; // reemplaza con tu direccion IP
 
 const api = axios.create({
     baseURL: API_BASE_URL,
@@ -20,7 +20,7 @@ api.interceptors.request.use(async (config) => {
         }
         return config;
     } catch (error) {
-        console.log('Error al obtener el token', error);
+        console.error('Error al obtener el token', error);
         return Promise.reject(error);
     }
 });
